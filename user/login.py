@@ -26,15 +26,15 @@ def create_user(username,password,admin):
     
 def get_user(username):
     session = Session()
-    card = session.query(User).filter_by(username=username).first()
+    user = session.query(User).filter_by(username=username).first()
     session.close()
-    return card
+    return user
 
 def get_all_user():
     session = Session()
-    cards = session.query(User).all()
+    users = session.query(User).all()
     session.close()
-    return cards
+    return users
 
 def update_user(id, username, password,admin):
     session = Session()

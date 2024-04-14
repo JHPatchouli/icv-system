@@ -3,22 +3,22 @@ from flask import Flask, request, jsonify,Blueprint
 
 cars_br=Blueprint('cars',__name__,template_folder='templates')
 pub_speed={}
-for i in range(1,101):
-    pub_speed[i]=0
-
-
 @cars_br.route('/api/cars/speed/<int:id>', methods=['GET'])
 def get_cars_speed(id):
     global pub_speed
-    try:
-        ret_speed=pub_speed[id]
-        #打包字典数据返回json
-        car_speed = {'status': 200, 'msg': 'success', 'data': ret_speed}
-        return jsonify(car_speed)
-    except:
-        #打包字典数据返回json
-        car_speed = {'status': 204, 'msg': 'not found', 'data': None}
-        return jsonify(car_speed)
+    ret_speed=pub_speed[id]
+    #打包字典数据返回json
+    car_speed = {'status': 200, 'msg': 'success', 'data': ret_speed}
+    return jsonify(car_speed)
+
+#改写get_cars_speed为websocket模式
+#路由为/api/cars/speedsocket
+# @cars_br.route('/api/cars/speedsocket', methods=['GET'])
+# def get_cars_speed_socket():
+#     global pub_speed
+#     #打包字典数据返回json
+#     car_speed = {'status': 200, 'msg': 'success', 'data': pub_speed}
+#     return jsonify(car_speed)
 
 
 

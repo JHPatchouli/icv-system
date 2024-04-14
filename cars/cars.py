@@ -3,6 +3,8 @@ from flask import Flask, request, jsonify,Blueprint
 
 cars_br=Blueprint('cars',__name__,template_folder='templates')
 pub_speed={}
+for i in range(100):
+    pub_speed[i]=0
 @cars_br.route('/api/cars/speed/<int:id>', methods=['GET'])
 def get_cars_speed(id):
     global pub_speed

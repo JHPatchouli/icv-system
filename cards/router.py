@@ -11,8 +11,8 @@ cards_br=Blueprint('cards',__name__,template_folder='templates')
 # delete_card(id)
 
 #查询卡片
-@cards_br.route('/api/cards/raw/<id>', methods=['GET'])
-def get_card_raw(id):
+@cards_br.route('/api/cards/raw/<int:id>', methods=['GET'])
+def get_card_raw(id:int):
     try:
         card_raw = {'status': 200, 'msg': 'success', 'data': str(Obj_Card.get_card(id).raw)}
         return json.dumps(card_raw, sort_keys=False)
@@ -20,8 +20,8 @@ def get_card_raw(id):
         card_raw = {'status': 400, 'msg': 'fail', 'data': 'no such card'}
         return json.dumps(card_raw, sort_keys=False)
 
-@cards_br.route('/api/cards/info/<id>', methods=['GET'])
-def get_card_info(id):
+@cards_br.route('/api/cards/info/<int:id>', methods=['GET'])
+def get_card_info(id:int):
     try:
         card_info=Obj_Card.get_card(id)
         card_info_dict={'id':card_info.id,'r_num':card_info.r_num,'r_ide': card_info.r_ide,'r_type': card_info.r_type,'inter_range': card_info.inter_range,'over_range': card_info.over_range,'park_range': card_info.park_range,'char_range': card_info.char_range}

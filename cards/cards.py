@@ -22,14 +22,14 @@ class Card(Base):
 # 创建数据表
 Base.metadata.create_all(engine)
 # 创建Card对象的操作
-def create_card(id, raw, r_num, r_ide, r_type, inter_range, over_range, park_range, char_range):
+def create_card(id:int, raw:str, r_num:str, r_ide:str, r_type:str, inter_range:str, over_range:str, park_range:str, char_range:str):
     session = Session()
     new_card = Card(id=id, raw=raw, r_num=r_num, r_ide=r_ide, r_type=r_type, inter_range=inter_range,over_range=over_range, park_range=park_range, char_range=char_range)
     session.add(new_card)
     session.commit()
     session.close()
     
-def get_card(id):
+def get_card(id:int):
     session = Session()
     card = session.query(Card).filter_by(id=id).first()
     session.close()
@@ -41,7 +41,7 @@ def get_all_cards():
     session.close()
     return cards
 
-def update_card(id, raw, r_num, r_ide, r_type, inter_range, over_range, park_range, char_range):
+def update_card(id:int, raw:str, r_num:str, r_ide:str, r_type:str, inter_range:str, over_range:str, park_range:str, char_range:str):
     session = Session()
     card = session.query(Card).filter_by(id=id).first()
     card.raw = raw
@@ -55,7 +55,7 @@ def update_card(id, raw, r_num, r_ide, r_type, inter_range, over_range, park_ran
     session.commit()
 
         
-def delete_card(id):
+def delete_card(id:int):
     session = Session()
     card = session.query(Card).filter_by(id=id).first()
     session.delete(card)

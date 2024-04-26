@@ -1,36 +1,51 @@
 #写一个被Flask调用的路由模块
-from flask import Flask, request,Blueprint
 import json
+
+from flask import Blueprint, Flask, request, session
+
 import cars.cars as cars
+import orm.icv_orm as redis_orm
+from cars.cars_router import router_All
+from flask_session import Session
+
 cars_br=Blueprint('cars',__name__,template_folder='templates')
 
-# @cars_br.route('/api/cars/speed/<int:id>', methods=['GET'])
-# def get_cars_speed(id:int):
-#     global pub_speed
-#     try:
-#         ret_speed=pub_speed[id]
-#         #打包字典数据返回json
-#         car_speed = {'status': 200, 'msg': 'success', 'data': ret_speed}
-#         return json.dumps(car_speed,sort_keys=False)
-#     except:
-#         #打包字典数据返回json
-#         car_speed = {'status': 200, 'msg': 'success', 'data': 0}
-#         return json.dumps(car_speed,sort_keys=False)
 @cars_br.route('/api/cars/car_info/<int:id>', methods=['GET'])
 def get_cars_info(id:int):
-    #打包字典数据返回json
-    speed=cars.fake_cars_speed[id-1]['speed']
-    # print(speed)
-    loc=cars.fake_data[id-1]['data']
-    # print(loc)
-    power=cars.fake_cars_power[id-1]['power']
-    # print(power)
-    fake_data_rt={'car_status':1,'car_speed':speed,'car_loc':loc,'car_power': power,'car_pos': '-1'}
-    car_info = {'status': 200, 'msg': 'success', 'data': fake_data_rt}
-    if(cars.fake_car_loc(id)==False):
-        # print("FFFFF")
-        return json.dumps({'status': 200, 'msg': 'success', 'data': "err"},sort_keys=False)
-    return json.dumps(car_info,sort_keys=False)
+    if(redis_orm.RD_ORM.get("session_cookie_id")==None):
+        session['update']=True
+        session_cookie_id = session.sid
+        redis_orm.RD_ORM.set("session_cookie_id",session_cookie_id)
+        redis_orm.RD_ORM.expire('session_cookie_id', 2)
+    elif(redis_orm.RD_ORM.get("session_cookie_id").decode() in "None"):
+        session['update']=True
+        session_cookie_id = session.sid
+        redis_orm.RD_ORM.set("session_cookie_id",session_cookie_id)
+        redis_orm.RD_ORM.expire('session_cookie_id', 2)
+    if(redis_orm.RD_ORM.get("session_cookie_id").decode() in session.sid):
+        session['update']=True
+        session_cookie_id = session.sid
+        redis_orm.RD_ORM.set("session_cookie_id",session_cookie_id)
+        redis_orm.RD_ORM.expire('session_cookie_id', 2)
+    cars_data=json.loads(redis_orm.RD_ORM.get("cars_data").decode())
+    # print(cars_data[id-1])
+    return_data={
+        "status": 200,
+        "msg": "success",
+        "data": {
+            "car_status": cars_data[id-1]['data']['status'],
+            "car_speed": cars_data[id-1]['data']['speed'],
+            "car_loc": router_All[id-1][cars_data[id-1]['data']['index']],
+            "car_power": cars_data[id-1]['data']['power'],
+            "car_pos": "-1",
+        }
+    }
+    if('update' in session and redis_orm.RD_ORM.get("session_cookie_id").decode() == session.sid):
+        if(session.get('update')):
+            cars.update_index(id)
+    print(session.sid)
+    print("redis:"+redis_orm.RD_ORM.get("session_cookie_id").decode())
+    return json.dumps(return_data,sort_keys=False)
 
 @cars_br.route('/api/cars/setspeed/<int:id>/<int:speed>', methods=['GET'])
 def set_cars_speed(id:int,speed:int):

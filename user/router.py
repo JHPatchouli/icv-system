@@ -1,7 +1,11 @@
 import json
-from flask import Flask, request, jsonify, Blueprint, session, redirect, url_for
-from flask_session import Session
+
+from flask import (Blueprint, Flask, jsonify, redirect, request, session,
+                   url_for)
+
 import user.user as Obj_User
+from flask_session import Session
+
 user_br=Blueprint('login',__name__,template_folder='templates')
 
 @user_br.route('/api/user/login',methods=['POST'])
@@ -29,7 +33,7 @@ def logout():
     # 清除session
     session.pop('username', None)
     session.pop('admin', None)
-    
+    session.clear()
     return json.dumps({'status': '200', 'message': 'success','data':''},sort_keys=False)
 
 

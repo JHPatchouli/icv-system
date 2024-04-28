@@ -4,6 +4,7 @@ from flask_session import Session
 from cars.router import cars_br
 from cards.router import cards_br
 from user.router import user_br 
+from sheet.router import sheet_br 
 #允许跨域访问
 from flask_cors import CORS
 
@@ -17,6 +18,7 @@ Session(app)
 app.register_blueprint(cars_br)
 app.register_blueprint(cards_br)
 app.register_blueprint(user_br)
+app.register_blueprint(sheet_br)
 CORS(app)
 @app.route('/')
 def cars_index():

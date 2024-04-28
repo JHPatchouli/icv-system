@@ -24,7 +24,7 @@ def cars_run_status(id:int):
 def car_cam_stream(id:int):
     data={
     'car_id': id,
-    'cam_stream': "rtsp://192.168.3.11:8554/live/car_{}".format(id),
+    'cam_stream': "rtsp://rtsp.mrhao.xyz:8554/live/car_{}".format(id),
     'traffic_light': random.choice(['red','yellow','green'])
     }
     return data

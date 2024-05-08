@@ -1,21 +1,27 @@
 import random
 import threading
 import time
+
 import cars.cars_router as cars_router
-fake_cars_speed=[{"speed": random.randint(3, 5)},{"speed":random.randint(3, 5)},{"speed":random.randint(3, 5)},{"speed":random.randint(3, 5)}]
-fake_cars_power=[{"power": random.randint(20, 100)},{"power":random.randint(20, 100)},{"power":random.randint(20, 100)},{"power":random.randint(20, 100)}]
-fake_cars_status=[{'status': 1},{'status': 1},{'status': 1},{'status': 1}]
-router_index=[0,0,0,0]
+
+fake_cars_speed=[]
+fake_cars_power=[]
+fake_cars_status=[]
+router_index=[]
 fake_data=[]
-# flag=0
-# current_time=0
-# current_second=0
 
 def fake_data_init():
     for data in cars_router.router_All:
         # print(data)
-        fake_data.append({"data":int(data[0])})
+        fake_data.append({"data":data[0]})
+        fake_cars_speed.append({"speed": 3})
+        fake_cars_power.append({"power": random.randint(20, 100)})
+        fake_cars_status.append({'status': 1})
+        router_index.append(0)
         
+
+def get_car_num():
+    return len(cars_router.router_All)
 
 def fake_car_loc(id:int):
     global router_index
